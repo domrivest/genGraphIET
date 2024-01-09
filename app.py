@@ -13,7 +13,7 @@ colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', 'https://fonts.googleapis.com/css2?family=News+Cycle&display=swap']
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
