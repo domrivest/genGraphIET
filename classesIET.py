@@ -124,9 +124,9 @@ class figureIET:
                                       hovertemplate = t.hovertemplate.replace(t.name, frDict[t.name])
                                      )
          )
-      self.fig.update_layout(legend_title = 'Légende')
+      self.fig.update_layout(legend_title = '')#'Légende')
    else:
-      self.fig.update_layout(legend_title = 'Legend')
+      self.fig.update_layout(legend_title = '')#'Legend')
 
    # Ajouts des noms d'axes s'ils existent
    try:
