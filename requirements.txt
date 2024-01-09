@@ -3,3 +3,6 @@ numpy
 pandas
 plotly
 gunicorn
+dash-bootstrap-components
+dash-daq
+chardet
