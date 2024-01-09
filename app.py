@@ -8,7 +8,7 @@ import datetime
 from classesIET import figureIET
 
 
-df_colors = pd.read_csv('assets/colors.csv')
+df_colors = pd.read_csv('assets/colors.csv', sep=';')
 colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
 
