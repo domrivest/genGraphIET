@@ -88,7 +88,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
             'There was an error processing this file.'
         ])
 
-    return dcc.Graph(id=str([filename, date]), figure=graph.fig)
+    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config={'toImageButtonOptions':{'filename':filename.replace('.txt', '')}})
     #     html.Div([
     #     html.H5(filename),
     #     html.H6(datetime.datetime.fromtimestamp(date)),
