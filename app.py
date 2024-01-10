@@ -8,7 +8,7 @@ import datetime
 from classesIET import figureIET
 
 
-df_colors = pd.read_csv('assets/colors.csv', sep=';')
+df_colors = pd.read_csv('assets/colors.csv')
 colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
 enDict = dict(zip(df_colors.variable, df_colors.label_en))
@@ -87,8 +87,13 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         return html.Div([
             'There was an error processing this file.'
         ])
+    
+    if isFrench:
+        langue = 'fr'
+    else:
+        langue = 'en'
 
-    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config={'toImageButtonOptions':{'filename':filename.replace('.txt', '')}})
+    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config={'toImageButtonOptions':{'filename':filename.replace('.txt', '')},  'locale':langue})
     #     html.Div([
     #     html.H5(filename),
     #     html.H6(datetime.datetime.fromtimestamp(date)),

@@ -111,11 +111,20 @@ class figureIET:
             self.df['namesFr'] = frList
             self.fig = px.pie(self.df, values=self.df.columns[1], names='namesFr', color=self.df.columns[0], color_discrete_map=colordict)
             self.fig.update_layout(legend_title = 'Légende')
+            self.fig.update_layout(separators='. ')
          else:
             enList=[enDict[k] for k in df[df.columns[0]].tolist() if k in enDict]
             self.df['namesEn'] = enList
             self.fig = px.pie(self.df, values=self.df.columns[1], names='namesEn', color=self.df.columns[0], color_discrete_map=colordict)
             self.fig.update_layout(legend_title = 'Legend')
+         # Ajouts des hoverinfo et textinfo s'ils existent
+         try:
+            self.fig.update_traces(textinfo = self.metadataDict['chart.textinfo'])
+         except: None
+         try:
+            self.fig.update_traces(hoverinfo = self.metadataDict['chart.hoverinfo'])
+         except: None
+
 
       case _:
          print("Ce type de graphique n'est pas défini")
@@ -150,6 +159,7 @@ class figureIET:
                                      )
          )
       self.fig.update_layout(legend_title = '')#'Légende')
+      self.fig.update_layout(separators='. ') # Changer le séparateur de centaines
    elif not self.metadataDict['chart.type'] == 'pie':
       self.fig.for_each_trace(lambda t: t.update(name = enDict[t.name],
                                       legendgroup = enDict[t.name],
