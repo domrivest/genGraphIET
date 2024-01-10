@@ -11,6 +11,7 @@ from classesIET import figureIET
 df_colors = pd.read_csv('assets/colors.csv', sep=';')
 colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
+enDict = dict(zip(df_colors.variable, df_colors.label_en))
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', 'https://fonts.googleapis.com/css2?family=News+Cycle&display=swap']
@@ -80,7 +81,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
     decoded = base64.b64decode(content_string)
     try:
         if 'txt' in filename:
-            graph = figureIET(decoded, colordict, frDict, isFrench, isDim, isSource, showTitle)
+            graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle)
     except Exception as e:
         print(e)
         return html.Div([

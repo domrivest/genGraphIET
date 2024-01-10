@@ -8,7 +8,7 @@ from io import StringIO
 import chardet
 
 class figureIET:
-  def __init__(self, decoded, colordict, frDict, isFrench, isDim, isSource, showTitle):
+  def __init__(self, decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle):
 
    # Plotly default theme
    pio.templates.default = "plotly_white"
@@ -109,13 +109,38 @@ class figureIET:
          if isFrench:
             frList=[frDict[k] for k in df[df.columns[0]].tolist() if k in frDict]
             self.df['namesFr'] = frList
-            self.fig = px.pie(self.df, values=self.df.columns[1], names='namesFr', color_discrete_map=colordict)
+            self.fig = px.pie(self.df, values=self.df.columns[1], names='namesFr', color=self.df.columns[0], color_discrete_map=colordict)
             self.fig.update_layout(legend_title = 'Légende')
          else:
-            self.fig = px.pie(self.df, values=self.df.columns[1], names=self.df.columns[0], color_discrete_map=colordict)
+            enList=[enDict[k] for k in df[df.columns[0]].tolist() if k in enDict]
+            self.df['namesEn'] = enList
+            self.fig = px.pie(self.df, values=self.df.columns[1], names='namesEn', color=self.df.columns[0], color_discrete_map=colordict)
+            self.fig.update_layout(legend_title = 'Legend')
 
       case _:
          print("Ce type de graphique n'est pas défini")
+
+   # Changer le type d'axe si spécifié, ntcicks et ticks val
+   try: # Axe X
+      self.fig.update_xaxes(type = self.metadataDict['xaxes.type']) # ( "-" | "linear" | "log" | "date" | "category" | "multicategory" ) 
+      try:
+         self.fig.update_xaxes(nticks = self.metadataDict['xaxes.ticks']) # int
+      except: None
+      try:
+         self.fig.update_xaxes(tickvals = [int(ele) for ele in self.metadataDict['xaxes.tickvals'].split(',')]) # 2020, 2022
+      except: None
+   except: None
+
+   try: # Axe Y
+      self.fig.update_yaxes(type = self.metadataDict['yaxes.type']) 
+      try:
+         self.fig.update_yaxes(nticks = self.metadataDict['xaxes.ticks'])
+      except: None
+      try:
+         self.fig.update_yaxes(tickvals = self.metadataDict['xaxes.tickvals'])
+      except: None
+   except: None
+   
    
    # Si français - Changer les noms de variables
    if isFrench and not self.metadataDict['chart.type'] == 'pie':
@@ -125,8 +150,16 @@ class figureIET:
                                      )
          )
       self.fig.update_layout(legend_title = '')#'Légende')
-   else:
+   elif not self.metadataDict['chart.type'] == 'pie':
+      self.fig.for_each_trace(lambda t: t.update(name = enDict[t.name],
+                                      legendgroup = enDict[t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, enDict[t.name])
+                                     )
+         )
       self.fig.update_layout(legend_title = '')#'Legend')
+   else:
+      #self.fig.update_layout(legend_title = '')#'Legend')
+      None
 
    # Ajouts des noms d'axes s'ils existent
    try:
