@@ -85,7 +85,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
     except Exception as e:
         print(e)
         return html.Div([
-            'There was an error processing this file.'
+            'Il y a eu une erreur en traitant ce fichier : '+str(e)
         ])
     
     if isFrench:
