@@ -133,7 +133,7 @@ class figureIET:
    try: # Axe X
       self.fig.update_xaxes(type = self.metadataDict['xaxes.type']) # ( "-" | "linear" | "log" | "date" | "category" | "multicategory" ) 
       try:
-         self.fig.update_xaxes(nticks = self.metadataDict['xaxes.ticks']) # int
+         self.fig.update_xaxes(tickmode = self.metadataDict['xaxes.tickmode'], tick0=int(self.metadataDict['xaxes.tick0']), dtick=int(self.metadataDict['xaxes.dtick'])) # int
       except: None
       try:
          self.fig.update_xaxes(tickvals = [int(ele) for ele in self.metadataDict['xaxes.tickvals'].split(',')]) # 2020, 2022
