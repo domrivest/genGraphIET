@@ -94,6 +94,7 @@ class figureIET:
          self.fig.update_xaxes(type='category')
          
       case 'bar.grouped':
+         self.df[self.df.columns[1]] = self.df[self.df.columns[1]].astype('str')
          self.fig = px.bar(self.df, x=self.df.columns[0], y=self.df.columns[2], color=self.df.columns[1], color_discrete_map=colordict, barmode='group')
          self.fig.update_xaxes(type='category')
 
