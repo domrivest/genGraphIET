@@ -92,8 +92,9 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         langue = 'fr'
     else:
         langue = 'en'
-
-    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config={'toImageButtonOptions':{'filename':filename.replace('.txt', '')},  'locale':langue})
+        
+    configOptions = {'toImageButtonOptions':{'format':'pdf', 'filename':filename.replace('.txt', '')}
+    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config= configOptions,  'locale':langue})
     #     html.Div([
     #     html.H5(filename),
     #     html.H6(datetime.datetime.fromtimestamp(date)),
