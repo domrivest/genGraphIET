@@ -6,3 +6,4 @@ gunicorn
 dash-bootstrap-components
 dash-daq
 chardet
+kaleido

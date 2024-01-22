@@ -50,9 +50,17 @@ app.layout = html.Div([
             value=False,
             label="Afficher le titre lorsqu'il est renseigné dans le fichier",
             labelPosition='top'
-        ),
-        dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
-    ], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
+        )], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
+        html.Div([
+            daq.ToggleSwitch(
+            id='downloadAll',
+            value=False,
+            label="Télécharger toutes les figures dans le format spécifié lors du téléversement",
+            labelPosition='top'
+            ),
+            dcc.Dropdown(['png', 'svg', 'pdf'], 'png', id='downloadFormatdd'),
+            dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
+        ], style={'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
     dcc.Upload(
         id='upload-data',
         children=html.Div([
@@ -75,7 +83,7 @@ app.layout = html.Div([
     html.Div(id='output-data-upload'),
 ])
 
-def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle):
+def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
@@ -94,27 +102,18 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         langue = 'en'
         
     configOptions = {'toImageButtonOptions':{'format':'png', 'scale':10, 'filename':filename.replace('.txt', '')}, 'locale':langue}
+
+    if downloadAll: # Si le bouton download est activé
+        if downloadFormat == 'png':
+            graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat, scale=10)
+        else:
+            graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat)
+
     return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions)
-    #     html.Div([
-    #     html.H5(filename),
-    #     html.H6(datetime.datetime.fromtimestamp(date)),
-
-    #     dash_table.DataTable(
-    #         graph.df.to_dict('records'),
-    #         [{'name': i, 'id': i} for i in graph.df.columns]
-    #     ),
-
-    #     html.Hr(),  # horizontal line
-
-    #     # For debugging, display the raw contents provided by the web browser
-    #     html.Div('Raw Content'),
-    #     html.Pre(contents[0:200] + '...', style={
-    #         'whiteSpace': 'pre-wrap',
-    #         'wordBreak': 'break-all'
-    #     })
-    # ]), dcc.Graph(id=str(date), figure=graph.fig)
 
 @callback(Output('output-data-upload', 'children', allow_duplicate=True),
+              Output('upload-data', 'contents'),
+              Output('upload-data', 'filename'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'),
@@ -122,13 +121,15 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('dimensionsToggle', 'value'),
               State('sourceToggle', 'value'),
               State('showTitle', 'value'),
+              State('downloadFormatdd', 'value'),
+              State('downloadAll', 'value'),
               prevent_initial_call = True)
-def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle):
+def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll):
     if list_of_contents is not None:
         children = [
-            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle) for c, n, d in
+            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
-        return children
+        return children, None, None
     
 @callback(
     Output('output-data-upload', 'children'),

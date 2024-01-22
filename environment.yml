@@ -1,0 +1,15 @@
+name: genGraphIET
+dependencies:
+  - python
+  - numpy
+  - pandas
+  - gunicorn
+  - chardet
+  - pip
+  - pip:
+    - dash 
+    - dash-bootstrap-components
+    - dash-daq
+    - plotly
+    - kaleido
+    

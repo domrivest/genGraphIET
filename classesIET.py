@@ -57,6 +57,7 @@ class figureIET:
       case 'bar.grouped.horizontal':
          self.df[self.df.columns[1]] = self.df[self.df.columns[1]].astype('str')
          self.fig = px.bar(self.df, y=self.df.columns[0], x=self.df.columns, color=df.columns[1], color_discrete_map=colordict, barmode='group', orientation='h')
+         self.fig.update_layout(yaxis=dict(autorange="reversed"))
 
       case 'bar.grouped.stacked':
       #   if self.df.iloc[0 ,1] == '-':
@@ -73,20 +74,18 @@ class figureIET:
       #           ),
       #        row = 1, col = subplotsIndex.index(i)+1)
       #   else:
-         self.fig = px.bar(self.df, x=self.df.columns[1], y=self.df.columns, facet_col=self.df.columns[0], color_discrete_map=colordict)
+         self.fig = px.bar(self.df, x=self.df.columns[1], y=self.df.columns, facet_col=self.df.columns[0], color_discrete_map=colordict, barmode='stack')
+         self.fig.update_layout(legend_traceorder="reversed")
          self.fig.update_xaxes(type='category')
          self.fig.update_xaxes(matches=None)
-         self.fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+         self.fig.for_each_annotation(lambda a: a.update(text="")) #a.text.split("=")[-1])) Empty title text
+         self.fig.update_layout(xaxis_title=self.df[self.df.columns[0]].unique().tolist()[0])
          for axis in self.fig.layout:
             if type(self.fig.layout[axis]) == go.layout.XAxis:
-               self.fig.layout[axis].title.text = ''
-         i = 0#len(df[df.columns[0]].unique().tolist())-1 # Avoir le nombre d'index (années) différentes
-         # for i in df[df.columns[0]].unique().tolist():
-         #       if i == min(df[df.columns[0]].unique().tolist()):
-         #          self.fig.layout['xaxis'].title.text = str(i)
-         #          self.fig.layout['xaxis'].title.visible = True
-         #       else:
-         #          self.fig.layout['xaxis'+str(df[df.columns[0]].unique().tolist().index(i)+1)].title.text = str(i)
+               if axis.split("s")[-1] == '':
+                     self.fig.layout[axis].title.text = self.df[self.df.columns[0]].unique().tolist()[0]
+               elif int(axis.split("s")[-1]) <= (len(self.df[self.df.columns[0]].unique().tolist())):
+                  self.fig.layout[axis].title.text = self.df[self.df.columns[0]].unique().tolist()[int(axis.split("s")[-1])-1]
 
 
       case 'bar.stacked':
@@ -150,6 +149,14 @@ class figureIET:
          self.fig.update_yaxes(tickvals = self.metadataDict['xaxes.tickvals'])
       except: None
    except: None
+
+   # Changer l'angle de rotation des labels de l'axe si spécifié
+   try: # axe x
+      self.fig.update_xaxes(tickangle=int(self.metadataDict['xaxes.tickangle']))
+   except: None
+   try: # axe y
+      self.fig.update_yaxes(tickangle=int(self.metadataDict['yaxes.tickangle']))
+   except: None
    
    
    # Si français - Changer les noms de variables
@@ -177,10 +184,24 @@ class figureIET:
       self.fig.update_layout(yaxis_title = self.metadataDict['chart.yLabel'])
    except:
       self.fig.update_layout(yaxis_title = "")
-   try:
-      self.fig.update_layout(xaxis_title = self.metadataDict['chart.xLabel'])
-   except:
-      self.fig.update_layout(xaxis_title = "")
+   if not self.metadataDict['chart.type'] == 'bar.grouped.stacked': # Ne pas conserver pour bar.grouped.stacked (labels importants)
+      try:
+         self.fig.update_layout(xaxis_title = self.metadataDict['chart.xLabel'])
+      except:
+         self.fig.update_layout(xaxis_title = "")
+
+   # Changer l'ordre de la légende si non pie et non bar.grouped et grouped.stacked
+   if not self.metadataDict['chart.type'] in ['pie', 'bar.grouped', 'bar.grouped.stacked', 'bar.grouped.horizontal']:
+      self.fig.update_layout(legend_traceorder="reversed")
+
+   # Ajouter pad axe y
+   self.fig.update_layout(margin_pad=5)
+
+   # Modifier le format de l'axe des y (pas de k pour les milliers)
+   if isFrench:
+      self.fig.update_layout(yaxis_tickformat = ',')
+   else:
+      self.fig.update_layout(yaxis_tickformat = ',')
 
    # Contraindre les dimensions is isDim est vrai
    if isDim:
