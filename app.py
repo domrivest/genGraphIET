@@ -6,6 +6,7 @@ import pandas as pd
 import base64
 import datetime
 from classesIET import figureIET
+import io
 
 
 df_colors = pd.read_csv('assets/colors.csv')
@@ -52,13 +53,13 @@ app.layout = html.Div([
             labelPosition='top'
         )], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
         html.Div([
-            daq.ToggleSwitch(
-            id='downloadAll',
-            value=False,
-            label="Télécharger toutes les figures dans le format spécifié lors du téléversement",
-            labelPosition='top'
-            ),
-            dcc.Dropdown(['png', 'svg', 'pdf'], 'png', id='downloadFormatdd'),
+            # daq.ToggleSwitch(
+            # id='downloadAll',
+            # value=False,
+            # label="Télécharger toutes les figures dans le format spécifié lors du téléversement",
+            # labelPosition='top'
+            # ),
+            # dcc.Dropdown(['png', 'svg', 'pdf'], 'png', id='downloadFormatdd'),
             dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
         ], style={'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
     dcc.Upload(
@@ -83,7 +84,7 @@ app.layout = html.Div([
     html.Div(id='output-data-upload'),
 ])
 
-def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll):
+def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle): #, downloadFormat, downloadAll):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
@@ -103,11 +104,13 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         
     configOptions = {'toImageButtonOptions':{'format':'png', 'scale':10, 'filename':filename.replace('.txt', '')}, 'locale':langue}
 
-    if downloadAll: # Si le bouton download est activé
-        if downloadFormat == 'png':
-            graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat, scale=10)
-        else:
-            graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat)
+    # if downloadAll: # Si le bouton download est activé
+    #     if downloadFormat == 'png':
+    #         graph.fig.write_image(filename.replace('.txt', '.'+ downloadFormat), format=downloadFormat, scale=10)
+    #         in_memory_image = graph.fig.to_image(format=downloadFormat, engine="kaleido", scale=10)
+    #         dcc.Download(id = str([filename, date]), data=dcc.send_bytes(in_memory_image, filename=filename.replace('.txt', '.'+downloadFormat)))
+    #     else:
+    #         graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat)
 
     return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions)
 
@@ -121,13 +124,13 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('dimensionsToggle', 'value'),
               State('sourceToggle', 'value'),
               State('showTitle', 'value'),
-              State('downloadFormatdd', 'value'),
-              State('downloadAll', 'value'),
+            #   State('downloadFormatdd', 'value'),
+            #   State('downloadAll', 'value'),
               prevent_initial_call = True)
-def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll):
+def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle):#, downloadFormat, downloadAll):
     if list_of_contents is not None:
         children = [
-            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle, downloadFormat, downloadAll) for c, n, d in
+            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children, None, None
     
@@ -138,5 +141,6 @@ def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDi
 )
 def update_output(n_clicks):
     return None
+
 if __name__ == '__main__':
     app.run(debug=True)
