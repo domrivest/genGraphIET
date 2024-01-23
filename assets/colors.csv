@@ -1,4 +1,4 @@
-﻿variable,label_fr,label_en,color
+variable,label_fr,label_en,color
 1990,1990,1990,#5487a4
 2005,2005,2005,#88b04b
 2021,2021,2021,#ea5530
@@ -6,7 +6,7 @@
 2010,2010,2010,#88b04b
 2020,2020,2020,#ea5530
 1990 (energy),1990 (lié à l'énergie),1990 (energy),#5487a4
-1990 (non-energy),1990 (non énergétique ),1990 (non-energy),#a9c4d3
+1990 (non-energy),1990 (non énergétique),1990 (non-energy),#a9c4d3
 "1990 (oil & gas, refineries, fugitive sources)","1990 (pétrole, gaz, raffinage, incluant sources fugitives)","1990 (oil & gas, refineries, fugitive sources)",#5487a4
 1990 (other),1990 (autre),1990 (other),#a9c4d3
 2005 (energy),2005 (lié à l'énergie),2005 (energy),#88b04b
@@ -29,8 +29,8 @@ Australia,Australie,Australia,#5487a4
 Austria,Autriche,Austria,#5487a4
 Autobus,Autobus,Buses,#718ab3
 Autres renouvelables,Autres renouvelables,Other renewables,#a17591
-Aviation Gasoline,Kérosène,Aviation Gasoline,#314deb
-Aviation Gasoline,Kérosène,Aviation Gasoline,#314deb
+Aviation Gasoline,Essence d'aviation,Aviation Gasoline,#314deb
+Aviation Gasoline,Essence d'aviation,Aviation Gasoline,#314deb
 Aviation Turbo Fuel,Kérosène,Aviation Turbo Fuel,#82368c
 Aviation Turbo Fuel,Kérosène,Aviation Turbo Fuel,#82368c
 Avions,Avions,Airplanes,#63c0d9
@@ -141,7 +141,7 @@ Incinération des résidus agricoles dans les champs,Incinération des résidus 
 Industrial,Industries,Industrial,#5487a4
 Industrial processes,Procédés industriels,Industrial processes,#5487a4
 Industrie,Industrie,Industry,#5d675f
-Industry,Industrie,Industry,#5d675f
+Industry,Industrie,Industry,
 Industrie - Combustion,Industrie - combustion,Industry – Combustion,#d20a11
 Industrie - Process,Procédés industriels,Industrial processes,#ccc321
 Industrie Combustion - CCS - réutilisées,Combustion en industrie + CUC,Industry combustion + CCU,#d29d31
