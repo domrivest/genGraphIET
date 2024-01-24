@@ -40,8 +40,8 @@ Bioénergie,Bioénergie,Bioenergy,#88b04b
 Biogaz de site d'enfouissement,Biogaz de site d'enfouissement,Landfill biogas,#88b04b
 Biomasse,Biomasse,Biomass,#b04c4c
 Boue d'épuration,Boue d'épuration,Sludge,#7b3a38
-Buildings,Bâtiments,Commercial and Institutional Buildings,#f7d255
-Commercial and Institutional Buildings,Bâtiments comm. et inst.,Commercial and Institutional Buildings,#f7d255
+Buildings,Bâtiments,Commercial and institutional buildings,#f7d255
+Commercial and Institutional Buildings,Bâtiments comm. et inst.,Commercial and institutional buildings,#f7d255
 CA,CA,CA,#000000
 Camions légers,Camions légers,Light trucks,#d3ed40
 CAN,CAN,CAN,#000000
@@ -72,7 +72,7 @@ Ciment - Variation de la production,Ciment – Variation de la production,Cement
 Coal,Charbon,Coal,#ea5530
 Commercial,Commercial,Commercial,#367047
 Commercial and Institutional,Commercial et institutionnel,Commercial and institutional,#f7d255
-"Commercial, inst. and publ. admin.",Commercial et institutionnel (inc. adm. pub.),Commercial and institutional (inc. Pub. Adm.),#f7d255
+"Commercial, inst. and publ. admin.",Commercial et institutionnel (inc. adm. pub.),Commercial and institutional (inc. publ. adm.),#f7d255
 Conservation d'énergie,Réaménagement énergétique,Energy retrofit,#5ef0c2
 Conventionnel - Diesel,Conventionnel - diesel,Conventional - Diesel,#878787
 Conventionnel - Gaz Naturel,Conventionnel - gaz naturel,Conventional - Natural gas,#b1900a
