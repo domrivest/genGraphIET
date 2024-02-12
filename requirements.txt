@@ -6,5 +6,5 @@ gunicorn
 dash-bootstrap-components
 dash-daq
 chardet
-kaleido
+kaleido==0.1.0
 chart_studio
