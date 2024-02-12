@@ -142,20 +142,16 @@ def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDi
 def fig_to_data(graph, formatDownload) -> dict:
     buffer = io.BytesIO()
     # Sélection du format et application du facteur d'échelle aux png
-    if formatDownload == 'png':
-        graph.fig.write_image(buffer, format='png', scale= 10)
-    elif formatDownload == 'svg':
-        graph.fig.write_image(buffer, format='svg')
-    elif formatDownload == 'pdf':
-        graph.fig.write_image(buffer, format='pdf')
+    graph.fig.write_image(buffer, format=formatDownload, scale=10) if formatDownload == 'png' else graph.fig.write_image(buffer, format=formatDownload)
+
     buffer.seek(0)
     encoded = base64.b64encode(buffer.getvalue())
-    returnDict = {
+
+    return {
         "content": encoded.decode(),
         "filename": graph.filename+'.'+formatDownload,
         "base64": True
     }
-    return returnDict 
 
 # Effacement des figures
 @callback(
@@ -167,6 +163,22 @@ def update_output(n_clicks):
     listeFigures = []
     return None
 
+# # Téléchargement en lot des figures
+# @callback(
+#     Output({"type": "download", "index": ALL}, "data"),
+#     Input("download-button", "n_clicks"),
+#     State("downloadFormatdd", "value"),
+#     prevent_initial_call=True
+# )
+# def download_figure(n_clicks, formatDownload):
+#     retourDownload = []
+#     for i in range(nbDccDownload):
+#         if i in range(len(listeFigures)):
+#             retourDownload.append(fig_to_data(listeFigures[i], formatDownload))
+#         else:
+#             retourDownload.append(None)
+#     return retourDownload
+
 # Téléchargement en lot des figures
 @callback(
     Output({"type": "download", "index": ALL}, "data"),
@@ -174,14 +186,8 @@ def update_output(n_clicks):
     State("downloadFormatdd", "value"),
     prevent_initial_call=True
 )
-def download_figure(n_clicks, formatDownload):
-    retourDownload = []
-    for i in range(nbDccDownload):
-        if i in range(len(listeFigures)):
-            retourDownload.append(fig_to_data(listeFigures[i], formatDownload))
-        else:
-            retourDownload.append(None)
-    return retourDownload
+def download_figure(n_clicks, format_download):
+    return [fig_to_data(listeFigures[i % len(listeFigures)], format_download) if i < len(listeFigures) else None for i in range(nbDccDownload)]
 
 @callback(
     Output('placeholderChartStudio', 'children'),
