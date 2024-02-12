@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, callback, Output, Input, State, dash_table
+from dash import Dash, html, dcc, callback, Output, Input, State, dash_table, ALL
 import dash_daq as daq
 import dash_bootstrap_components as dbc
 import plotly.express as px
@@ -7,6 +7,8 @@ import base64
 import datetime
 from classesIET import figureIET
 import io
+import plotly.graph_objects as go
+from base64 import standard_b64decode, b64decode, b64encode
 
 
 df_colors = pd.read_csv('assets/colors.csv')
@@ -16,10 +18,13 @@ enDict = dict(zip(df_colors.variable, df_colors.label_en))
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', 'https://fonts.googleapis.com/css2?family=News+Cycle&display=swap']
-
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
+nbDccDownload = 100 # Nombre de figures pouvant être téléchargées simultanément
+
+# Liste des figures
+listeFigures = []
 app.layout = html.Div([
     html.H1(
         children='Outil de génération de graphiques - IET',
@@ -53,13 +58,11 @@ app.layout = html.Div([
             labelPosition='top'
         )], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
         html.Div([
-            # daq.ToggleSwitch(
-            # id='downloadAll',
-            # value=False,
-            # label="Télécharger toutes les figures dans le format spécifié lors du téléversement",
-            # labelPosition='top'
-            # ),
-            # dcc.Dropdown(['png', 'svg', 'pdf'], 'png', id='downloadFormatdd'),
+            html.Button("Télélécharger en lot", id='download-button'),
+            *[
+                dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
+            ],
+            dcc.Dropdown(['png', 'svg', 'pdf'], placeholder= "Sélectionnez le format pour l'export en lot", id='downloadFormatdd', style={'width': '340px'}),
             dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
         ], style={'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
     dcc.Upload(
@@ -91,6 +94,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
     try:
         if 'txt' in filename:
             graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle)
+            listeFigures.append(graph)
     except Exception as e:
         print(e)
         return html.Div([
@@ -102,17 +106,11 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
     else:
         langue = 'en'
         
+    graph.filename = filename.replace('.txt', '')
+    listeFigures.append(graph)
     configOptions = {'toImageButtonOptions':{'format':'png', 'scale':10, 'filename':filename.replace('.txt', '')}, 'locale':langue}
 
-    # if downloadAll: # Si le bouton download est activé
-    #     if downloadFormat == 'png':
-    #         graph.fig.write_image(filename.replace('.txt', '.'+ downloadFormat), format=downloadFormat, scale=10)
-    #         in_memory_image = graph.fig.to_image(format=downloadFormat, engine="kaleido", scale=10)
-    #         dcc.Download(id = str([filename, date]), data=dcc.send_bytes(in_memory_image, filename=filename.replace('.txt', '.'+downloadFormat)))
-    #     else:
-    #         graph.fig.write_image(filename.replace('.txt', '.'+downloadFormat), format=downloadFormat)
-
-    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions)
+    return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions, className="figure")
 
 @callback(Output('output-data-upload', 'children', allow_duplicate=True),
               Output('upload-data', 'contents'),
@@ -124,8 +122,6 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('dimensionsToggle', 'value'),
               State('sourceToggle', 'value'),
               State('showTitle', 'value'),
-            #   State('downloadFormatdd', 'value'),
-            #   State('downloadAll', 'value'),
               prevent_initial_call = True)
 def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle):#, downloadFormat, downloadAll):
     if list_of_contents is not None:
@@ -134,13 +130,49 @@ def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDi
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children, None, None
     
+def fig_to_data(graph, formatDownload) -> dict:
+    buffer = io.BytesIO()
+    # Sélection du format et application du facteur d'échelle aux png
+    if formatDownload == 'png':
+        graph.fig.write_image(buffer, format='png', scale= 10)
+    elif formatDownload == 'svg':
+        graph.fig.write_image(buffer, format='svg')
+    elif formatDownload == 'pdf':
+        graph.fig.write_image(buffer, format='pdf')
+    buffer.seek(0)
+    encoded = base64.b64encode(buffer.getvalue())
+    returnDict = {
+        "content": encoded.decode(),
+        "filename": graph.filename+'.'+formatDownload,
+        "base64": True
+    }
+    return returnDict 
+
 @callback(
     Output('output-data-upload', 'children'),
     Input('boutonEffacer', 'n_clicks'),
     prevent_initial_call=True
 )
 def update_output(n_clicks):
+    listeFigures = []
     return None
+
+@callback(
+    Output({"type": "download", "index": ALL}, "data"),
+    [
+        Input("download-button", "n_clicks"),
+        State("downloadFormatdd", "value"),
+    ],
+    prevent_initial_call=True
+)
+def download_figure(n_clicks, formatDownload):
+    retourDownload = []
+    for i in range(nbDccDownload):
+        if i in range(len(listeFigures)):
+            retourDownload.append(fig_to_data(listeFigures[i], formatDownload))
+        else:
+            retourDownload.append(None)
+    return retourDownload
 
 if __name__ == '__main__':
     app.run(debug=True)
