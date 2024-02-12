@@ -66,7 +66,7 @@ app.layout = html.Div([
             *[
                 dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
-            dcc.Dropdown(['png', 'svg', 'pdf'], value='png', id='downloadFormatdd', style={'width': '340px'}),
+            dcc.Dropdown(['png', 'svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}),
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
             dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
             dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
@@ -115,7 +115,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         
     graph.filename = filename.replace('.txt', '')
     listeFigures.append(graph)
-    configOptions = {'toImageButtonOptions':{'format':'png', 'scale':10, 'filename':filename.replace('.txt', '')}, 'locale':langue}
+    configOptions = {'toImageButtonOptions':{'format':'png', 'scale':1, 'filename':filename.replace('.txt', '')}, 'locale':langue}
 
     return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions, className="figure")
 
