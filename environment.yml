@@ -12,5 +12,5 @@ dependencies:
     - dash-daq
     - plotly
     - kaleido
-    - chart-studio
+    - chart_studio
     

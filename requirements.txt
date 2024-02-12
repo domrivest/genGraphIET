@@ -7,3 +7,4 @@ dash-bootstrap-components
 dash-daq
 chardet
 kaleido
+chart_studio
