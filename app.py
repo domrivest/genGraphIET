@@ -102,7 +102,6 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
     try:
         if 'txt' in filename:
             graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle)
-            listeFigures.append(graph)
     except Exception as e:
         print(e)
         return html.Div([
