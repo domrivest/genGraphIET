@@ -66,7 +66,7 @@ app.layout = html.Div([
             *[
                 dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
-            dcc.Dropdown(['png', 'svg', 'pdf'], placeholder= "Sélectionnez le format pour l'export en lot", id='downloadFormatdd', style={'width': '340px'}),
+            dcc.Dropdown(['png', 'svg', 'pdf'], value='png', id='downloadFormatdd', style={'width': '340px'}),
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
             dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
             dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
@@ -170,10 +170,8 @@ def update_output(n_clicks):
 # Téléchargement en lot des figures
 @callback(
     Output({"type": "download", "index": ALL}, "data"),
-    [
-        Input("download-button", "n_clicks"),
-        State("downloadFormatdd", "value"),
-    ],
+    Input("download-button", "n_clicks"),
+    State("downloadFormatdd", "value"),
     prevent_initial_call=True
 )
 def download_figure(n_clicks, formatDownload):
