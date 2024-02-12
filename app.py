@@ -4,11 +4,15 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 import base64
-import datetime
+import chart_studio.plotly as py
+import chart_studio.tools
 from classesIET import figureIET
 import io
 import plotly.graph_objects as go
 from base64 import standard_b64decode, b64decode, b64encode
+
+# Setting dash credentials for the server
+chart_studio.tools.set_credentials_file(username='domrivest', api_key='X4rnV82LxBFDOuKSEN6x')
 
 
 df_colors = pd.read_csv('assets/colors.csv')
@@ -63,6 +67,9 @@ app.layout = html.Div([
                 dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
             dcc.Dropdown(['png', 'svg', 'pdf'], placeholder= "Sélectionnez le format pour l'export en lot", id='downloadFormatdd', style={'width': '340px'}),
+            #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
+            dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
+            dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
             dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
         ], style={'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
     dcc.Upload(
@@ -85,6 +92,7 @@ app.layout = html.Div([
         multiple=True
     ),
     html.Div(id='output-data-upload'),
+    html.Div(id="placeholderChartStudio")
 ])
 
 def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle): #, downloadFormat, downloadAll):
@@ -124,6 +132,7 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('showTitle', 'value'),
               prevent_initial_call = True)
 def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle):#, downloadFormat, downloadAll):
+    listeFigures = []
     if list_of_contents is not None:
         children = [
             parse_contents(c, n, d, isFrench, isDim, isSource, showTitle) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
@@ -148,6 +157,7 @@ def fig_to_data(graph, formatDownload) -> dict:
     }
     return returnDict 
 
+# Effacement des figures
 @callback(
     Output('output-data-upload', 'children'),
     Input('boutonEffacer', 'n_clicks'),
@@ -157,6 +167,7 @@ def update_output(n_clicks):
     listeFigures = []
     return None
 
+# Téléchargement en lot des figures
 @callback(
     Output({"type": "download", "index": ALL}, "data"),
     [
@@ -173,6 +184,18 @@ def download_figure(n_clicks, formatDownload):
         else:
             retourDownload.append(None)
     return retourDownload
+
+@callback(
+    Output('placeholderChartStudio', 'children'),
+    Input('boutonChartStudio', 'n_clicks'),
+    State("prefixeChartStudio", "value"),
+    prevent_initial_call=True
+)
+def update_output(n_clicks, prefixe):
+    for i in range(len(listeFigures)):
+        graph = listeFigures[i]
+        py.plot(graph.fig, filename=str(prefixe)+graph.filename, auto_open=False)
+    return None
 
 if __name__ == '__main__':
     app.run(debug=True)
