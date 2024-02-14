@@ -8,7 +8,7 @@ from io import StringIO
 import chardet
 
 class figureIET:
-  def __init__(self, decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle):
+  def __init__(self, decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle, fontSize):
 
    # Plotly default theme
    pio.templates.default = "plotly_white"
@@ -241,7 +241,7 @@ class figureIET:
 
    self.fig.update_layout(
    font_family="News Cycle",
-   font_size=12,
+   font_size=fontSize,
    font_color="black",
    title_font_family="News Cycle",
    title_font_color="black",
