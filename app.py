@@ -60,7 +60,11 @@ app.layout = html.Div([
             value=False,
             label="Afficher le titre lorsqu'il est renseigné dans le fichier",
             labelPosition='top'
-        )], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
+        ),
+        html.Div([
+            html.Label("Taille de police"),
+            dcc.Dropdown([8,9,10,11,12,13,14,15,16,17,18,19,20], value=14, id='fontSizedd', style={'width': '340px'})]),
+        ], style={'display': 'flex', 'justifyContent': 'space-between', 'padding': 10}),
         html.Div([
             html.Button("Télélécharger en lot", id='download-button'),
             *[
@@ -95,13 +99,13 @@ app.layout = html.Div([
     html.Div(id="placeholderChartStudio")
 ])
 
-def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle): #, downloadFormat, downloadAll):
+def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle, fontSize): #, downloadFormat, downloadAll):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
     try:
         if 'txt' in filename:
-            graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle)
+            graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle, fontSize)
     except Exception as e:
         print(e)
         return html.Div([
@@ -129,12 +133,13 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('dimensionsToggle', 'value'),
               State('sourceToggle', 'value'),
               State('showTitle', 'value'),
+              State('fontSizedd', 'value'),
               prevent_initial_call = True)
-def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle):#, downloadFormat, downloadAll):
+def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle, fontSize):#, downloadFormat, downloadAll):
     listeFigures = []
     if list_of_contents is not None:
         children = [
-            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
+            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle, fontSize) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children, None, None
     
