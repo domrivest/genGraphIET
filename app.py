@@ -70,7 +70,7 @@ app.layout = html.Div([
             *[
                 dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
-            dcc.Dropdown(['svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}), # PNG quand kaleido fonctionnera sur serveur
+            dcc.Dropdown(['png', 'svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}), # PNG quand kaleido fonctionnera sur serveur
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
             dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
             dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
@@ -166,22 +166,6 @@ def fig_to_data(graph, formatDownload) -> dict:
 def update_output(n_clicks):
     listeFigures = []
     return None
-
-# # Téléchargement en lot des figures
-# @callback(
-#     Output({"type": "download", "index": ALL}, "data"),
-#     Input("download-button", "n_clicks"),
-#     State("downloadFormatdd", "value"),
-#     prevent_initial_call=True
-# )
-# def download_figure(n_clicks, formatDownload):
-#     retourDownload = []
-#     for i in range(nbDccDownload):
-#         if i in range(len(listeFigures)):
-#             retourDownload.append(fig_to_data(listeFigures[i], formatDownload))
-#         else:
-#             retourDownload.append(None)
-#     return retourDownload
 
 # Téléchargement en lot des figures
 @callback(
