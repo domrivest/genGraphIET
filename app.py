@@ -70,7 +70,7 @@ app.layout = html.Div([
             *[
                 dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
-            dcc.Dropdown(['png', 'svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}), # PNG quand kaleido fonctionnera sur serveur
+            dcc.Dropdown(['svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}), # PNG quand kaleido fonctionnera sur serveur
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
             dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
             dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
