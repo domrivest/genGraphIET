@@ -1,0 +1,7 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Fonctionnement général}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Fichiers d'entrée}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Modification des paramètres généraux}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Particularité des types de graphique}{6}{section.2}%
+\contentsline {section}{\numberline {3}Téléchargement en lot des graphiques affichés}{8}{section.3}%
+\contentsline {section}{\numberline {4}Publication des graphiques dans \textit {Chart-Studio}}{9}{section.4}%
