@@ -1,9 +1,9 @@
-PWD /media/dominic/Stash/Documents/IET/Documentation de l'outil de génération de graphiques
+PWD /media/dominic/Stash/Documents/IET/genGraphIET/Documentation - Dossier LaTex
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /media/dominic/Stash/Documents/IET/Documentation de l'outil de génération de graphiques/document.tex
+INPUT /media/dominic/Stash/Documents/IET/genGraphIET/Documentation - Dossier LaTex/document.tex
 OUTPUT document.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
