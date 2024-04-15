@@ -143,10 +143,10 @@ class figureIET:
    try: # Axe Y
       self.fig.update_yaxes(type = self.metadataDict['yaxes.type']) 
       try:
-         self.fig.update_yaxes(nticks = self.metadataDict['xaxes.ticks'])
+         self.fig.update_yaxes(nticks = self.metadataDict['yaxes.ticks'])
       except: None
       try:
-         self.fig.update_yaxes(tickvals = self.metadataDict['xaxes.tickvals'])
+         self.fig.update_yaxes(tickvals = self.metadataDict['yaxes.tickvals'])
       except: None
    except: None
 
