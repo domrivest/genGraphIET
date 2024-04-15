@@ -164,6 +164,7 @@ def fig_to_data(graph, formatDownload) -> dict:
     prevent_initial_call=True
 )
 def update_output(n_clicks):
+    global listeFigures
     listeFigures = []
     return None
 
