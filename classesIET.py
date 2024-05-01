@@ -130,24 +130,31 @@ class figureIET:
          print("Ce type de graphique n'est pas défini")
 
    # Changer le type d'axe si spécifié, ntcicks et ticks val
-   try: # Axe X
+   # Axe X
+   try: 
       self.fig.update_xaxes(type = self.metadataDict['xaxes.type']) # ( "-" | "linear" | "log" | "date" | "category" | "multicategory" ) 
-      try:
-         self.fig.update_xaxes(tickmode = self.metadataDict['xaxes.tickmode'], tick0=int(self.metadataDict['xaxes.tick0']), dtick=int(self.metadataDict['xaxes.dtick'])) # int
-      except: None
-      try:
-         self.fig.update_xaxes(tickvals = [int(ele) for ele in self.metadataDict['xaxes.tickvals'].split(',')]) # 2020, 2022
-      except: None
+   except: None
+   try:
+      self.fig.update_xaxes(nticks = self.metadataDict['xaxes.nticks']) 
+   except: None
+   try:
+      self.fig.update_xaxes(tickmode = self.metadataDict['xaxes.tickmode'], tick0=int(self.metadataDict['xaxes.tick0']), dtick=int(self.metadataDict['xaxes.dtick'])) # int
+   except: None
+   try:
+      self.fig.update_xaxes(tickvals = [int(ele) for ele in self.metadataDict['xaxes.tickvals'].split(',')]) # 2020, 2022
    except: None
 
    try: # Axe Y
       self.fig.update_yaxes(type = self.metadataDict['yaxes.type']) 
-      try:
-         self.fig.update_yaxes(nticks = self.metadataDict['yaxes.ticks'])
-      except: None
-      try:
-         self.fig.update_yaxes(tickvals = self.metadataDict['yaxes.tickvals'])
-      except: None
+   except: None
+   try:
+      self.fig.update_yaxes(nticks = self.metadataDict['yaxes.nticks']) 
+   except: None
+   try:
+      self.fig.update_yaxes(tickmode = self.metadataDict['yaxes.tickmode'], tick0=int(self.metadataDict['yaxes.tick0']), dtick=int(self.metadataDict['yaxes.dtick'])) # int
+   except: None
+   try:
+      self.fig.update_yaxes(tickvals = [int(ele) for ele in self.metadataDict['yaxes.tickvals'].split(',')]) # 2020, 2022
    except: None
 
    # Changer l'angle de rotation des labels de l'axe si spécifié

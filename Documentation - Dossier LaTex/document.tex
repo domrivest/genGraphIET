@@ -42,7 +42,7 @@ literate={à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {â}{{\^a}}1,
 
 \section{Fonctionnement général}
 
-L'outil de génération de graphiques de l'IET fonctionne sur un serveur hébergé par render.com. L'outil est codé dans le langage python principalement à l'aide des librairies montréalaises Dash et Plotly.
+L'outil de génération de graphiques de l'IET fonctionne sur un serveur hébergé par render.com. L'outil est codé dans le langage python principalement à l'aide des librairies montréalaises Dash et Plotly. Il est hébergé à l'adresse \href{https://generateur-de-graphiques-iet.onrender.com/}{https://generateur-de-graphiques-iet.onrender.com/}.
 
 Le code est hébergé sur GitHub à l'addresse \href{https://github.com/domrivest/genGraphIET}{https://github.com/domrivest/genGraphIET}.
 
@@ -110,55 +110,56 @@ Le premier type inclut les paramètres suivants :
     \item Afficher le titre lorsqu'il est renseigné dans le fichier (Booléen) : Affiche au-dessus de la figure le titre si \textit{metadata;chart.title} est renseigné.
     \item Taille de police (Choix d'un entier) : Contrôle la taille des éléments texte de manière relative (ex : le titre sera toujours plus gros que les titres d'axe).
 \end{itemize}
-
-\vspace{1cm}
-Bien que les paramètres par défaut font bien le travail en général, certains paramètres peuvent être modifiés en spécifiant des valeurs dans les fichiers textes propres aux graphiques :
+\vspace{0.2cm}
+Bien que les paramètres par défaut font bien le travail en général, certains paramètres peuvent être modifiés en spécifiant des valeurs dans les fichiers textes propres aux graphiques. Il s'agit d'ajouter une ligne contenant le paramètre à modifier avec la bonne syntaxe. Des exemples sont donnés ci-dessous.
 
 \textbf{Modifications des axes :}
 \begin{itemize}
-    \item Type d'axe (\textit{metadata;xaxes.type} et \textit{metadata;yaxes.type}); Valeurs possibles : ( "-" | "linear" | "log" | "date" | "category" | "multicategory" ); Défaut : "-" (S'ajuste automatiquement); Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-type}{Documentation Plotly}
-    \item Mode de graduation (\textit{metadata;xaxes.tickmode} et \textit{metadata;yaxes.tickmode}); Valeurs possibles : ( "auto" | "linear" | "array" ); Défaut : "auto"; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-tickmode}{Documentation Plotly}
-    \item Valeur initiale de graduation (\textit{metadata;xaxes.tick0} et \textit{metadata;yaxes.tick0}); Valeurs possibles : Nombre ou catégorie; À utiliser avec \textit{dtick}; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tick0}{Documentation Plotly}
-    \item Delta entre les graduations (\textit{metadata;xaxes.dtick} et \textit{metadata;yaxes.dtick}); Valeurs possibles : Nombre positif; À utiliser avec \textit{tick0}; Voir la documentation pour les axes de type "log" : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-dtick}{Documentation Plotly}
-    \item Valeurs de graduation spécifiques (\textit{metadata;xaxes.tickvals} et \textit{metadata;yaxes.tickvals}); Valeurs possibles : Liste de nombres ou éléments de texte séparés par une virgule; Ex : 2000,2003,2010 ; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-tickvals}{Documentation Plotly}
-    \item Rotation des étiquettes d'axe (\textit{xaxes.tickangle} et \textit{xaxes.yickangle}); Valeurs possibles : Nombre; Change l'angle des étiquettes par rapport à l'horizontal; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tickangle}{Documentation Plotly} 
+    \item Type d'axe (\textit{metadata;xaxes.type} et \textit{metadata;yaxes.type}); Valeurs possibles : ( "-" | "linear" | "log" | "date" | "category" | "multicategory" ); Défaut : "-" (S'ajuste automatiquement); Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-type}{Documentation Plotly}; Exemple: \textit{metadata;xaxes.type;category}
+    \item Mode de graduation (\textit{metadata;xaxes.tickmode} et \textit{metadata;yaxes.tickmode}); Valeurs possibles : ( "auto" | "linear" | "array" ); Défaut : "auto"; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-tickmode}{Documentation Plotly}; Exemple: \textit{metadata;xaxes.tickmode;linear}
+    \item Valeur initiale de graduation (\textit{metadata;xaxes.tick0} et \textit{metadata;yaxes.tick0}); Valeurs possibles : Nombre ou catégorie; À utiliser avec \textit{dtick}. À noter que Plotly ne laissera pas de trou dans l'axe, ainsi, si la valeur initiale commence après la donnée initiale et que l'invervalle entre les graduations est trop petit, il y aura tout de même des graduations en-deça de la valeur initiale.; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tick0}{Documentation Plotly}; Un exemple est montré ci-bas.
+    \item Delta entre les graduations (\textit{metadata;xaxes.dtick} et \textit{metadata;yaxes.dtick}); Valeurs possibles : Nombre positif; À utiliser avec \textit{tick0}; Voir la documentation pour les axes de type "log" : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-dtick}{Documentation Plotly}; Un exemple est montré ci-bas.
+    \item Nombre maximal de graduations sur l'axe (peut être inférieur au nombre spécifié) (\textit{metadata;xaxes.nticks} et \textit{metadata;yaxes.nticks}); Valeurs possibles : Entiers positifs; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-nticks}{Documentation Plotly}; Un exemple est montré ci-bas.
+    \item Valeurs de graduation spécifiques (\textit{metadata;xaxes.tickvals} et \textit{metadata;yaxes.tickvals}); Valeurs possibles : Liste de nombres ou éléments de texte séparés par une virgule; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-tickvals}{Documentation Plotly}; Un exemple est montré ci-bas.
+    \item Rotation des étiquettes d'axe (\textit{xaxes.tickangle} et \textit{xaxes.yickangle}); Valeurs possibles : Nombre; Change l'angle des étiquettes par rapport à l'horizontal; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tickangle}{Documentation Plotly}; Exemple: \textit{metadata;xaxes.tickangle;90}
 \end{itemize}
 
 \pagebreak
-\textbf{Exemple d'ajustement de la graduation d'un axe des x}
+\textbf{Exemple d'ajustement de la graduation d'un axe des y}
 
-Voici le code ajouté au fichier texte du graphique pour spécifier la graduation par valeur initiale et par delta :
+Voici le code ajouté au fichier texte du graphique pour spécifier la graduation par valeur initiale et par delta:
 
 \begin{lstlisting}
-    metadata;xaxes.tickmode;linear
-    metadata;xaxes.tick0;2001
-    metadata;xaxes.dtick;1(\textit{metadata;xaxes.tickmode} et \textit{metadata;yaxes.tickmode})
+    metadata;yaxes.tickmode;linear
+    metadata;yaxes.tick0;500
+    metadata;yaxes.dtick;2500
 \end{lstlisting}
 
 Voici le code ajouté au fichier texte du graphique pour spécifier la graduation pour des valeurs spécifiques :
 
 \begin{lstlisting}
-    metadata;xaxes.type;linear
-    metadata;xaxes.tickvals;2001,2008,2019,2020,2021
+    metadata;yaxes.type;linear
+    metadata;yaxes.tickvals;0,2500,7500,10000
 \end{lstlisting}
 
 La figure \ref{fig:exempleGraduation} montre la différence entre les deux méthodes.
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}{.5\textwidth}
+    \begin{subfigure}{\textwidth}
       \centering
       \includegraphics[width=\linewidth]{assets/fig3.2_linear_tickmode.png}
       \caption{Valeurs de graduation spécifiées par valeur initiale et par delta}
       \label{fig:grad1}
     \end{subfigure}%
-    \begin{subfigure}{.5\textwidth}
+    
+    \begin{subfigure}{\textwidth}
       \centering
       \includegraphics[width=\linewidth]{assets/fig3.2_linear_tickvals.png}
       \caption{Valeurs de graduation spécifiques}
       \label{fig:grad2}
     \end{subfigure}
-    \caption{Exemple d'application des paramètres d'axe sur l'axe des x}
+    \caption{Exemple d'application des paramètres d'axe sur l'axe des y}
     \label{fig:exempleGraduation}
     \end{figure}
 
