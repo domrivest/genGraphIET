@@ -14,8 +14,14 @@ from base64 import standard_b64decode, b64decode, b64encode
 # Setting dash credentials for the server
 chart_studio.tools.set_credentials_file(username='domrivest', api_key='X4rnV82LxBFDOuKSEN6x')
 
+try:
+    df_colors = pd.read_csv('assets/colors.csv', sep=";", encoding='latin-1')
+except:
+    try:
+        df_colors = pd.read_csv('assets/colors.csv')
+    except:
+        print("Il y a un problème avec le fichier colors.csv")
 
-df_colors = pd.read_csv('assets/colors.csv')
 colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
 enDict = dict(zip(df_colors.variable, df_colors.label_en))
