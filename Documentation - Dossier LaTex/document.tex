@@ -47,7 +47,7 @@ L'outil de génération de graphiques de l'IET fonctionne sur un serveur héberg
 Le code est hébergé sur GitHub à l'addresse \href{https://github.com/domrivest/genGraphIET}{https://github.com/domrivest/genGraphIET}.
 
 \subsection{Fichiers d'entrée}
-L'outil prend en entrée des fichiers texte séparés en deux portions : les métadonnées et les données. Les métadonnées définissent le titre, le type, les axes, les titres d'axe, la source et certaines options d'affichage des graphiques. Voici un exemple de fichier de définition d'un graphique à bandes horizontal : 
+L'outil prend en entrée des fichiers texte séparés en deux portions : les métadonnées et les données. Les métadonnées définissent le titre, le type, les axes, les titres d'axe, la source et certaines options d'affichage des figures. Voici un exemple de fichier de définition d'un graphique à bandes horizontal : 
 
 \begin{lstlisting}
     metadata;chart.title;Industrial energy use by industry (2000, 2010 and 2020)
@@ -104,14 +104,14 @@ Outre cela, il existe deux types de paramètres modifiables par l'utilisateur du
 
 Le premier type inclut les paramètres suivants :
 \begin{itemize}
-    \item Produire les graphiques en français (Booléen) : Utilise la colonne \textit{label\_fr} du fichier \textit{colors.csv} si vrai.
-    \item Contraindre les dimensions des graphiques à 1000x400 pixels (Booléen) : Contraint les dimensions des figures si vrai.
+    \item Produire les figures en français (Booléen) : Utilise la colonne \textit{label\_fr} du fichier \textit{colors.csv} si vrai.
     \item Afficher la source lorsqu'elle est renseignée dans le fichier (Booléen) : Affiche en bas de la figure la source en taille 10 si \textit{metadata;data.source} est renseigné.
     \item Afficher le titre lorsqu'il est renseigné dans le fichier (Booléen) : Affiche au-dessus de la figure le titre si \textit{metadata;chart.title} est renseigné.
     \item Taille de police (Choix d'un entier) : Contrôle la taille des éléments texte de manière relative (ex : le titre sera toujours plus gros que les titres d'axe).
+    \item Spécifier la hauteur, la largeur et la résolution des figures produites (entrées d'entiers positifs). La résolution s'applique lors du téléchargement en PNG et est un simple multiplicateur des dimensions de la figure qui ne modifie pas l'échelle des éléments. Ainsi une figure de 1000x400 pixels avec une résolution de 10 deviendra une image de 10000x4000 pixels avec la même apparence.
 \end{itemize}
 \vspace{0.2cm}
-Bien que les paramètres par défaut font bien le travail en général, certains paramètres peuvent être modifiés en spécifiant des valeurs dans les fichiers textes propres aux graphiques. Il s'agit d'ajouter une ligne contenant le paramètre à modifier avec la bonne syntaxe. Des exemples sont donnés ci-dessous.
+Bien que les paramètres par défaut font bien le travail en général, certains paramètres peuvent être modifiés en spécifiant des valeurs dans les fichiers textes propres aux figures. Il s'agit d'ajouter une ligne contenant le paramètre à modifier avec la bonne syntaxe. Des exemples sont donnés ci-dessous.
 
 \textbf{Modifications des axes :}
 \begin{itemize}
@@ -121,10 +121,10 @@ Bien que les paramètres par défaut font bien le travail en général, certains
     \item Delta entre les graduations (\textit{metadata;xaxes.dtick} et \textit{metadata;yaxes.dtick}); Valeurs possibles : Nombre positif; À utiliser avec \textit{tick0}; Voir la documentation pour les axes de type "log" : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-dtick}{Documentation Plotly}; Un exemple est montré ci-bas.
     \item Nombre maximal de graduations sur l'axe (peut être inférieur au nombre spécifié) (\textit{metadata;xaxes.nticks} et \textit{metadata;yaxes.nticks}); Valeurs possibles : Entiers positifs; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-nticks}{Documentation Plotly}; Un exemple est montré ci-bas.
     \item Valeurs de graduation spécifiques (\textit{metadata;xaxes.tickvals} et \textit{metadata;yaxes.tickvals}); Valeurs possibles : Liste de nombres ou éléments de texte séparés par une virgule; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-minor-tickvals}{Documentation Plotly}; Un exemple est montré ci-bas.
-    \item Rotation des étiquettes d'axe (\textit{xaxes.tickangle} et \textit{xaxes.yickangle}); Valeurs possibles : Nombre; Change l'angle des étiquettes par rapport à l'horizontal; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tickangle}{Documentation Plotly}; Exemple: \textit{metadata;xaxes.tickangle;90}
+    \item Rotation des étiquettes d'axe (\textit{xaxes.tickangle} et \textit{yaxes.tickangle}); Valeurs possibles : Nombre; Change l'angle des étiquettes par rapport à l'horizontal; Documentation : \href{https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-tickangle}{Documentation Plotly}; Exemple: \textit{metadata;xaxes.tickangle;90}
 \end{itemize}
 
-\pagebreak
+\vspace{0.2cm}
 \textbf{Exemple d'ajustement de la graduation d'un axe des y}
 
 Voici le code ajouté au fichier texte du graphique pour spécifier la graduation par valeur initiale et par delta:
@@ -232,7 +232,7 @@ Voici un exemple des quatre premières lignes de données :
 
 \textbf{Graphique à lignes et nuage de points}
 
-Les deux types de graphiques se définissent de la même manière, mais le nuage de points n'a pas de lignes reliant les points. Voici un exemple des deux premières lignes de données :
+Les deux types de figures se définissent de la même manière, mais le nuage de points n'a pas de lignes reliant les points. Voici un exemple des deux premières lignes de données :
 \begin{lstlisting}
     data;reference;month;Mt
     data;Western Canadian Select (WCS);2014-01-01;65.69
@@ -240,7 +240,7 @@ Les deux types de graphiques se définissent de la même manière, mais le nuage
 
 \textbf{Graphique en pointe de tarte}
 
-Pour les graphiques en pointe de tarte, le pourcentage par pointe est affiché par défaut. Il est cependant possible d'afficher les valeurs directement ou les deux simultanément. Cependant, cette dernière option prend plus de place dans la figure.
+Pour les figures en pointe de tarte, le pourcentage par pointe est affiché par défaut. Il est cependant possible d'afficher les valeurs directement ou les deux simultanément. Cependant, cette dernière option prend plus de place dans la figure.
 
 Voici les premières lignes de données pour le graphique par défaut :
 \begin{lstlisting}
@@ -285,19 +285,19 @@ Pour afficher la valeur et le pourcentage, on utilise :
         \label{fig:thirdpie}
     \end{subfigure}
             
-    \caption{Configuration des graphiques en pointe de tarte.}
+    \caption{Configuration des figures en pointe de tarte.}
     \label{fig:piechart}
     \end{figure}
 
-\section{Téléchargement en lot des graphiques affichés}
+\section{Téléchargement en lot des figures affichées}
 
-Dans l'outil de génération, le téléchargement en lot d'un maximum de 100 graphiques affichés est possible en format vectoriel PDF ou SVG. Dû aux limitations matérielles du serveur, à l'efficacité actuelle de la librairie d'export en PNG et à la résolution d'export souhaitée, cette option n'est pour l'instant pas disponible.
+Dans l'outil de génération, le téléchargement en lot d'un maximum de 100 figures affichés est possible en format vectoriel PDF ou SVG. Dû aux limitations matérielles du serveur, à l'efficacité actuelle de la librairie d'export en PNG et à la résolution d'export souhaitée, cette option n'est pour l'instant pas disponible.
 
-\section{Publication des graphiques dans \textit{Chart-Studio}}
+\section{Publication des figures dans \textit{Chart-Studio}}
 
-\href{https://chart-studio.plotly.com/feed/#/}{\textit{Chart-Studio}} est une plateforme développée par \textit{Plotly} pour héberger et modifier des graphiques en ligne. Cette plateforme est la base de la stratégie d'intégration des graphiques du générateur dans Wordpress. Elle permet de conserver une copie d'un graphique sur le web et à des ressources externes comme Wordpress ou quelconque site internet d'y accéder. Le bouton d'export vers Chart-Studio envoie tous les graphiques affichés vers un compte Chart-Studio avec leur nom de fichier et un préfixe, si la case est remplie.
+\href{https://chart-studio.plotly.com/feed/#/}{\textit{Chart-Studio}} est une plateforme développée par \textit{Plotly} pour héberger et modifier des figures en ligne. Cette plateforme est la base de la stratégie d'intégration des figures du générateur dans Wordpress. Elle permet de conserver une copie d'un graphique sur le web et à des ressources externes comme Wordpress ou quelconque site internet d'y accéder. Le bouton d'export vers Chart-Studio envoie tous les figures affichées vers un compte Chart-Studio avec leur nom de fichier et un préfixe, si la case est remplie.
 
-Une fois les graphiques exportés, on peut les retrouver sur Chart-Studio et utiliser la fonction exporter (\textit{share}) pour retrouver le code HTML ou sa version iFrame qui sera à intégrer dans la page Wordpress. Voici à quoi le code et la plateforme ressemblent lorsqu'on veut partager un graphique pour l'imbriquer :
+Une fois les figures exportées, on peut les retrouver sur Chart-Studio et utiliser la fonction exporter (\textit{share}) pour retrouver le code HTML ou sa version iFrame qui sera à intégrer dans la page Wordpress. Voici à quoi le code et la plateforme ressemblent lorsqu'on veut partager un graphique pour l'imbriquer :
 
 HTML brut :
 \begin{lstlisting}

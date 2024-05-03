@@ -46,13 +46,7 @@ app.layout = html.Div([
         daq.ToggleSwitch(
             id='isFrenchToggle',
             value=False,
-            label='Produire les graphiques en Français',
-            labelPosition='top'
-        ),
-        daq.ToggleSwitch(
-            id='dimensionsToggle',
-            value=True,
-            label='Contraindre les dimensions des graphiques à 1000x400 pixels',
+            label='Produire les figures en Français',
             labelPosition='top'
         ),
         daq.ToggleSwitch(
@@ -80,13 +74,21 @@ app.layout = html.Div([
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
             dcc.Input(id="prefixeChartStudio", type="text", placeholder="Préfixe pour Chart-Studio", style={'marginRight':'10px'}, value=str()),
             dbc.Button("Publier dans Chart-Studio", id='boutonChartStudio', color="primary", n_clicks=0),
-            dbc.Button("Effacer les graphiques", id='boutonEffacer', color="primary", n_clicks=0),
+            dbc.Button("Effacer les figures", id='boutonEffacer', color="primary", n_clicks=0),
         ], style={'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
+        dbc.Row([
+            html.Div([html.P('Largeur des figures'),
+            dcc.Input(id="dimL", type="number", min=1, max=10000, step=1, value=1000)]),
+            html.Div([html.P('Hauteur des figures'),
+            dcc.Input(id="dimH", type="number", min=1, max=10000, step=1, value=400)]),
+            html.Div([html.P('Multiplicateur de la résolution des figures'),
+            dcc.Input(id="dimR", type="number", min=1, max=20, step=1, value=10)]),
+        ], style={'textAlign': 'center', 'display': 'flex', 'justifyContent': 'space-around', 'padding': 10}),
     dcc.Upload(
         id='upload-data',
         children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
+            'Glisser-déplacer ou ',
+            html.A('Sélectionner des fichiers')
         ]),
         style={
             'width': '100%',
@@ -105,13 +107,13 @@ app.layout = html.Div([
     html.Div(id="placeholderChartStudio")
 ])
 
-def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitle, fontSize): #, downloadFormat, downloadAll):
+def parse_contents(contents, filename, date, isFrench, dimDict, isSource, showTitle, fontSize): #, downloadFormat, downloadAll):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
     try:
         if 'txt' in filename:
-            graph = figureIET(decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle, fontSize)
+            graph = figureIET(decoded, colordict, frDict, enDict, isFrench, dimDict, isSource, showTitle, fontSize)
     except Exception as e:
         print(e)
         return html.Div([
@@ -125,10 +127,11 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
         
     graph.filename = filename.replace('.txt', '')
     listeFigures.append(graph)
-    configOptions = {'toImageButtonOptions':{'format':'png', 'scale':1, 'filename':filename.replace('.txt', '')}, 'locale':langue}
+    configOptions = {'toImageButtonOptions':{'format':'png', 'scale':dimDict['R'], 'filename':filename.replace('.txt', '')}, 'locale':langue}
 
     return dcc.Graph(id=str([filename, date]), figure=graph.fig, config=configOptions, className="figure")
 
+# Callback du téléversement
 @callback(Output('output-data-upload', 'children', allow_duplicate=True),
               Output('upload-data', 'contents'),
               Output('upload-data', 'filename'),
@@ -136,16 +139,19 @@ def parse_contents(contents, filename, date, isFrench, isDim, isSource, showTitl
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'),
               State('isFrenchToggle', 'value'),
-              State('dimensionsToggle', 'value'),
+              State('dimL', 'value'),
+              State('dimH', 'value'),
+              State('dimR', 'value'),
               State('sourceToggle', 'value'),
               State('showTitle', 'value'),
               State('fontSizedd', 'value'),
               prevent_initial_call = True)
-def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, isDim, isSource, showTitle, fontSize):#, downloadFormat, downloadAll):
+def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, dimL, dimH, dimR, isSource, showTitle, fontSize):#, downloadFormat, downloadAll):
     listeFigures = []
+    dimDict = {'L': dimL, 'H': dimH, 'R': dimR}
     if list_of_contents is not None:
         children = [
-            parse_contents(c, n, d, isFrench, isDim, isSource, showTitle, fontSize) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
+            parse_contents(c, n, d, isFrench, dimDict, isSource, showTitle, fontSize) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children, None, None
     

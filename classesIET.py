@@ -8,7 +8,7 @@ from io import StringIO
 import chardet
 
 class figureIET:
-  def __init__(self, decoded, colordict, frDict, enDict, isFrench, isDim, isSource, showTitle, fontSize):
+  def __init__(self, decoded, colordict, frDict, enDict, isFrench, dimDict, isSource, showTitle, fontSize):
 
    # Plotly default theme
    pio.templates.default = "plotly_white"
@@ -210,12 +210,13 @@ class figureIET:
    else:
       self.fig.update_layout(yaxis_tickformat = ',')
 
-   # Contraindre les dimensions is isDim est vrai
-   if isDim:
+   # Contraindre les dimensions is avec dimDict est vrai
+   try:
       self.fig.update_layout(
-         width = 1000,
-         height = 400
+         width = dimDict['L'],
+         height = dimDict['H']
       )
+   except: None
 
    # Montrer le titre si il est renseigné
    if showTitle:
