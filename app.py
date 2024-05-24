@@ -10,12 +10,14 @@ from classesIET import figureIET
 import io
 import plotly.graph_objects as go
 from base64 import standard_b64decode, b64decode, b64encode
+import os
 
 # Setting dash credentials for the server
-chart_studio.tools.set_credentials_file(username='domrivest', api_key='X4rnV82LxBFDOuKSEN6x')
+chart_studio.tools.set_credentials_file(username=os.environ.get("username"), api_key=os.environ.get("api_key"))
 
 try:
     df_colors = pd.read_csv('assets/colors.csv', sep=";", encoding='latin-1')
+    if len(df_colors.columns) <= 3: df_colors = pd.read_csv('assets/colors.csv')
 except:
     try:
         df_colors = pd.read_csv('assets/colors.csv')
