@@ -8,3 +8,4 @@ dash-daq
 chardet
 kaleido==0.2.1
 chart_studio
+openpyxl

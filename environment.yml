@@ -13,4 +13,5 @@ dependencies:
     - plotly
     - kaleido==0.1.0
     - chart_studio
+    - openpyxl
     

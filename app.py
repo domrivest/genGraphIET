@@ -16,13 +16,18 @@ import os
 chart_studio.tools.set_credentials_file(username=os.environ.get("username"), api_key=os.environ.get("api_key"))
 
 try:
-    df_colors = pd.read_csv('assets/colors.csv', sep=";", encoding='latin-1')
-    if len(df_colors.columns) <= 3: df_colors = pd.read_csv('assets/colors.csv')
+    df_colors = pd.read_excel('assets/colors.xlsx')
 except:
-    try:
-        df_colors = pd.read_csv('assets/colors.csv')
-    except:
-        print("Il y a un problème avec le fichier colors.csv")
+    print("Il y a un problème avec le fichier colors.xlsx")
+    
+# try:
+#     df_colors = pd.read_csv('assets/colors.csv', sep=";", encoding='latin-1')
+#     if len(df_colors.columns) <= 3: df_colors = pd.read_csv('assets/colors.csv')
+# except:
+#     try:
+#         df_colors = pd.read_csv('assets/colors.csv')
+#     except:
+#         print("Il y a un problème avec le fichier colors.csv")
 
 colordict = dict(zip(df_colors.variable, df_colors.color))
 frDict = dict(zip(df_colors.variable, df_colors.label_fr))
