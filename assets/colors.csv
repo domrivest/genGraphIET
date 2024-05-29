@@ -54,7 +54,7 @@ Cat始aire diesel,Cat始aire diesel,Diesel catenary,#e08787
 Cat始aire 四ectrique,Cat始aire 四ectrique,Electric catenary,#e8d4b7
 Cat始aire gaz naturel,Cat始aire gaz naturel,Natural gas catenary,#e85810
 CEO2018,PEC2018,CEO2018,
-CEO2021,PEC2021,CEO2021,
+CEO2021,PEC2021,CEO2021,#d20a11
 Chaleur,Chaleur,Heat,#d20a11
 Changement de carburant,Changement de carburant,Fuel change,#415243
 Charbon,Charbon,Coal,#ea5530
@@ -323,4 +323,4 @@ Gas_PFC,PFC,PFCs,#4d5efc
 Gas_SF6,SF6,SF6,#b87f9c
 Gas_NF3,NF3,NF3,#9bdb9a
 Rejets,Rejets,Waste,#7b3a38
-CEO 3rd edition,PEC 3e 仕ition,CEO 3rd edition,
+CEO 3rd edition,PEC 3e 仕ition,CEO 3rd edition,#4d5efc
