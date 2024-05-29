@@ -15,7 +15,10 @@ class figureIET:
       
    the_encoding = chardet.detect(decoded)['encoding']
    try:   
-      file = decoded.decode(the_encoding.lower())   
+      try: 
+         file = decoded.decode('utf8')   
+      except:
+         file = decoded.decode(the_encoding.lower())   
    except:
       print("Le décodage ne fonctionne pas")
 
