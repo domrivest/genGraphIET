@@ -63,26 +63,37 @@ class figureIET:
          self.fig.update_layout(yaxis=dict(autorange="reversed"))
 
       case 'bar.grouped.stacked':
-      #   if self.df.iloc[0 ,1] == '-':
-      #     # Création de subplots
-      #     subplotsIndex = df[df.columns[0]].unique().tolist()
-      #     self.fig = make_subplots(rows = 1, cols = len(subplotsIndex), subplot_titles=subplotsIndex)
-      #     self.fig.update_layout(barmode = "stack")
-      #     self.fig.update_xaxes(type='category')
-      #     for i in subplotsIndex:
-      #        dfr = df[df[df.columns[0]] == i].transpose()
-      #        self.fig.add_trace(
-      #           go.Bar(
-      #             x = dfr.iloc[1, :], y=dfr.iloc[2:, :]
-      #           ),
-      #        row = 1, col = subplotsIndex.index(i)+1)
-      #   else:
-         self.fig = px.bar(self.df, x=self.df.columns[1], y=self.df.columns, facet_col=self.df.columns[0], color_discrete_map=colordict, barmode='stack')
+        if self.df.iloc[0 ,1] == "'" or self.df.iloc[0 ,1] == "-":
+          # Création de subplots
+          firstWidth = 1/max(df.value_counts(df.columns[0]))/len(df.value_counts(df.columns[0]))
+          rowWidths = [firstWidth] + [(1-firstWidth)/(len(df.value_counts(df.columns[0]))-1)] * (len(df.value_counts(df.columns[0]))-1)
+          subplotsIndex = df[df.columns[0]].unique().tolist()
+          self.fig = make_subplots(rows = 1, cols = len(subplotsIndex), shared_yaxes='all', column_widths = rowWidths)
+          self.fig.update_layout(barmode = "relative")
+          self.fig.update_xaxes(type='category')
+          self.fig.update_layout(legend_traceorder="reversed")
+          for idx, i in enumerate(subplotsIndex):
+             dfr = df[df[df.columns[0]] == i].transpose()
+             for col in range(len(dfr.columns)):
+               for color in range(2, len(dfr)):
+                  self.fig.add_trace(
+                     go.Bar(x = [dfr.iloc[1, col]], y=[dfr.iloc[color, col]], name=dfr.index[color], marker_color=colordict[dfr.index[color]]),
+                     row = 1, col = subplotsIndex.index(i)+1)
+             #self.fig.update_xaxes(title_text=i)
+          for idx, i in enumerate(subplotsIndex):
+             self.fig.add_annotation(xref='x'+str(idx+1)+' domain' if idx > 0 else 'x domain', yref='paper', y=-0.4*(400/dimDict['H'])**1.5, x=0.5,\
+                                      xanchor='center', showarrow=False, text=i)
+          names = set() # Enlever les éléments redondants de la légende
+          self.fig.for_each_trace(lambda trace: trace.update(showlegend=False) if (trace.name in names) else names.add(trace.name))
+          self.fig.update_layout(legend_tracegroupgap=3)
+        else:
+         self.fig = px.bar(self.df, x=self.df.columns[1], y=self.df.columns, facet_col=self.df.columns[0], color_discrete_map=colordict, barmode='relative')
          self.fig.update_layout(legend_traceorder="reversed")
          self.fig.update_xaxes(type='category')
          self.fig.update_xaxes(matches=None)
          self.fig.for_each_annotation(lambda a: a.update(text="")) #a.text.split("=")[-1])) Empty title text
          self.fig.update_layout(xaxis_title=self.df[self.df.columns[0]].unique().tolist()[0])
+         self.fig.update_traces(width=0.8)
          for axis in self.fig.layout:
             if type(self.fig.layout[axis]) == go.layout.XAxis:
                if axis.split("s")[-1] == '':
@@ -92,7 +103,7 @@ class figureIET:
 
 
       case 'bar.stacked':
-         self.fig = px.bar(self.df, x=self.df.columns[0], y=self.df.columns, color_discrete_map=colordict, barmode='stack')
+         self.fig = px.bar(self.df, x=self.df.columns[0], y=self.df.columns, color_discrete_map=colordict, barmode='relative')
          self.fig.update_xaxes(type='category')
          
       case 'bar.grouped':
@@ -173,7 +184,7 @@ class figureIET:
    if isFrench and not self.metadataDict['chart.type'] == 'pie':
       self.fig.for_each_trace(lambda t: t.update(name = frDict[t.name],
                                       legendgroup = frDict[t.name],
-                                      hovertemplate = t.hovertemplate.replace(t.name, frDict[t.name])
+                                      hovertemplate = None#t.hovertemplate.replace(t.name, frDict[t.name]) # REGARDEr avec GO BarGroupedStacked
                                      )
          )
       self.fig.update_layout(legend_title = '')#'Légende')
@@ -181,7 +192,7 @@ class figureIET:
    elif not self.metadataDict['chart.type'] == 'pie':
       self.fig.for_each_trace(lambda t: t.update(name = enDict[t.name],
                                       legendgroup = enDict[t.name],
-                                      hovertemplate = t.hovertemplate.replace(t.name, enDict[t.name])
+                                      hovertemplate = None#t.hovertemplate.replace(t.name, enDict[t.name]) # REGARDEr avec GO BarGroupedStacked
                                      )
          )
       self.fig.update_layout(legend_title = '')#'Legend')
