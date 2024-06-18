@@ -81,7 +81,7 @@ class figureIET:
                      row = 1, col = subplotsIndex.index(i)+1)
              #self.fig.update_xaxes(title_text=i)
           for idx, i in enumerate(subplotsIndex):
-             self.fig.add_annotation(xref='x'+str(idx+1)+' domain' if idx > 0 else 'x domain', yref='paper', y=-0.4*(400/dimDict['H'])**1.5, x=0.5,\
+             self.fig.add_annotation(xref='x'+str(idx+1)+' domain' if idx > 0 else 'x domain', yref='paper', y=-0.35*(400/dimDict['H'])**1.5, x=0.5,\
                                       xanchor='center', showarrow=False, text=i)
           names = set() # Enlever les éléments redondants de la légende
           self.fig.for_each_trace(lambda trace: trace.update(showlegend=False) if (trace.name in names) else names.add(trace.name))
