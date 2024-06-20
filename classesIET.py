@@ -65,8 +65,9 @@ class figureIET:
       case 'bar.grouped.stacked':
         if self.df.iloc[0 ,1] == "'" or self.df.iloc[0 ,1] == "-":
           # Création de subplots
-          firstWidth = 1/max(df.value_counts(df.columns[0]))/len(df.value_counts(df.columns[0]))
-          rowWidths = [firstWidth] + [(1-firstWidth)/(len(df.value_counts(df.columns[0]))-1)] * (len(df.value_counts(df.columns[0]))-1)
+          rowWidths = []
+          for i in range(len(df.value_counts(df.columns[0]))):
+             rowWidths.append(df.value_counts(df.columns[0], sort=False).to_list()[i]/sum(df.value_counts(df.columns[0])))
           subplotsIndex = df[df.columns[0]].unique().tolist()
           self.fig = make_subplots(rows = 1, cols = len(subplotsIndex), shared_yaxes='all', column_widths = rowWidths)
           self.fig.update_layout(barmode = "relative")

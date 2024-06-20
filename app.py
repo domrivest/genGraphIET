@@ -155,6 +155,7 @@ def parse_contents(contents, filename, date, isFrench, dimDict, isSource, showTi
               State('fontSizedd', 'value'),
               prevent_initial_call = True)
 def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, dimL, dimH, dimR, isSource, showTitle, fontSize):#, downloadFormat, downloadAll):
+    global listeFigures
     listeFigures = []
     dimDict = {'L': dimL, 'H': dimH, 'R': dimR}
     if list_of_contents is not None:
