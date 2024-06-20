@@ -5,6 +5,7 @@ dependencies:
   - pandas
   - gunicorn
   - chardet
+  - repro-zipfile
   - pip
   - pip:
     - dash 

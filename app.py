@@ -11,6 +11,7 @@ import io
 import plotly.graph_objects as go
 from base64 import standard_b64decode, b64decode, b64encode
 import os
+from repro_zipfile import ReproducibleZipFile
 
 # Setting dash credentials for the server
 chart_studio.tools.set_credentials_file(username=os.environ.get("username"), api_key=os.environ.get("api_key"))
@@ -75,7 +76,7 @@ app.layout = html.Div([
         html.Div([
             html.Button("Télélécharger en lot", id='download-button'),
             *[
-                dcc.Download(id={"type": 'download', "index": i}) for i in range(nbDccDownload) # 100 figures à télécharger maximum
+                dcc.Download(id={"type": 'download', "index": 0}) #for i in range(nbDccDownload) # 100 figures à télécharger maximum
             ],
             dcc.Dropdown(['svg', 'pdf'], value='pdf', id='downloadFormatdd', style={'width': '340px'}), # PNG quand kaleido fonctionnera sur serveur
             #html.I("Renseignez à droite le préfixe pour l'export dans ChartStudio."),
@@ -154,6 +155,7 @@ def parse_contents(contents, filename, date, isFrench, dimDict, isSource, showTi
               State('fontSizedd', 'value'),
               prevent_initial_call = True)
 def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, dimL, dimH, dimR, isSource, showTitle, fontSize):#, downloadFormat, downloadAll):
+    global listeFigures
     listeFigures = []
     dimDict = {'L': dimL, 'H': dimH, 'R': dimR}
     if list_of_contents is not None:
@@ -161,20 +163,6 @@ def update_output(list_of_contents, list_of_names, list_of_dates, isFrench, dimL
             parse_contents(c, n, d, isFrench, dimDict, isSource, showTitle, fontSize) for c, n, d in   #, downloadFormat, downloadAll) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children, None, None
-    
-def fig_to_data(graph, formatDownload) -> dict:
-    buffer = io.BytesIO()
-    # Sélection du format et application du facteur d'échelle aux png
-    graph.fig.write_image(buffer, format=formatDownload, scale=10) if formatDownload == 'png' else graph.fig.write_image(buffer, format=formatDownload)
-
-    buffer.seek(0)
-    encoded = base64.b64encode(buffer.getvalue())
-
-    return {
-        "content": encoded.decode(),
-        "filename": graph.filename+'.'+formatDownload,
-        "base64": True
-    }
 
 # Effacement des figures
 @callback(
@@ -189,13 +177,25 @@ def update_output(n_clicks):
 
 # Téléchargement en lot des figures
 @callback(
-    Output({"type": "download", "index": ALL}, "data"),
+    Output({"type": "download", "index": 0}, "data"),
     Input("download-button", "n_clicks"),
     State("downloadFormatdd", "value"),
     prevent_initial_call=True
 )
-def download_figure(n_clicks, format_download):
-    return [fig_to_data(listeFigures[i % len(listeFigures)], format_download) if i < len(listeFigures) else None for i in range(nbDccDownload)]
+def download_figure(n_clicks, formatDownload):
+    zipBuffer = io.BytesIO() # Contient le zip 
+    with ReproducibleZipFile(zipBuffer, "w") as zp:
+        for fig in listeFigures:
+            buffer = io.BytesIO()
+            # Sélection du format et application du facteur d'échelle aux png
+            fig.fig.write_image(buffer, format=formatDownload, scale=10) if formatDownload == 'png' else fig.fig.write_image(buffer, format=formatDownload)
+            zp.writestr(fig.filename+'.'+formatDownload, data=buffer.getvalue())
+
+    encoded = base64.b64encode(zipBuffer.getvalue())
+    return {
+    "content": encoded.decode(),
+    "filename": "figures.zip",
+    "base64": True}
 
 @callback(
     Output('placeholderChartStudio', 'children'),
