@@ -62,6 +62,11 @@ class figureIET:
          self.fig = px.bar(self.df, y=self.df.columns[0], x=self.df.columns, color=df.columns[1], color_discrete_map=colordict, barmode='group', orientation='h')
          self.fig.update_layout(yaxis=dict(autorange="reversed"))
 
+      case 'bar.stacked.horizontal':
+         self.df[self.df.columns[1]] = self.df[self.df.columns[1]].astype('str')
+         self.fig = px.bar(self.df, y=self.df.columns[0], x=self.df.columns, color=df.columns[1], color_discrete_map=colordict, barmode='stack', orientation='h')
+         self.fig.update_layout(yaxis=dict(autorange="reversed"))
+
       case 'bar.grouped.stacked':
         if self.df.iloc[0 ,1] == "'" or self.df.iloc[0 ,1] == "-":
           # Création de subplots

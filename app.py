@@ -18,6 +18,7 @@ chart_studio.tools.set_credentials_file(username=os.environ.get("username"), api
 
 try:
     df_colors = pd.read_excel('assets/colors.xlsx')
+    df_colors['variable'] = df_colors['variable'].astype('str')
 except:
     print("Il y a un problème avec le fichier colors.xlsx")
     
