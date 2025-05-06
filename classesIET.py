@@ -163,6 +163,12 @@ class figureIET:
    try:
       self.fig.update_xaxes(tickvals = [int(ele) for ele in self.metadataDict['xaxes.tickvals'].split(',')]) # 2020, 2022
    except: None
+   try:
+      self.fig.update_xaxes(rangemode="tozero") # Commencer l'axe à zéro
+   except: None
+   try:
+      self.fig.update_xaxes(range = [float(ele) for ele in self.metadataDict['xaxes.range'].split(',')]) # 14.5,25.5
+   except: None
 
    try: # Axe Y
       self.fig.update_yaxes(type = self.metadataDict['yaxes.type']) 
@@ -175,6 +181,12 @@ class figureIET:
    except: None
    try:
       self.fig.update_yaxes(tickvals = [int(ele) for ele in self.metadataDict['yaxes.tickvals'].split(',')]) # 2020, 2022
+   except: None
+   try:
+      self.fig.update_yaxes(rangemode="tozero") # Commencer l'axe à zéro
+   except: None
+   try:
+      self.fig.update_yaxes(range = [float(ele) for ele in self.metadataDict['yaxes.range'].split(',')]) # 14.5,25.5
    except: None
 
    # Changer l'angle de rotation des labels de l'axe si spécifié
