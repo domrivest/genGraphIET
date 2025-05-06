@@ -1,7 +1,7 @@
 dash
 numpy
 pandas
-plotly==5.9.0
+plotly
 gunicorn
 dash-bootstrap-components
 dash-daq
