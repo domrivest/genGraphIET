@@ -12,7 +12,7 @@ dependencies:
     - dash-bootstrap-components
     - dash-daq
     - plotly
-    - kaleido==0.1.0
+    - kaleido==0.2.1
     - chart_studio
     - openpyxl
     
