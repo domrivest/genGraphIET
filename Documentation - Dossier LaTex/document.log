@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.5.23)  6 MAY 2025 18:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.5.23)  7 MAY 2025 09:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -411,31 +411,31 @@ Package pdftex.def Info: assets/fig3.2_linear_tickvals.png  used on input line 1
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5] [6 <./assets/fig3.2_linear_tickmode.png> <./assets/fig3.2_linear_tickvals.png>] [7] [8]
-<assets/fig5.2.png, id=188, 1003.75pt x 401.5pt>
+<assets/fig5.2.png, id=183, 1003.75pt x 401.5pt>
 File: assets/fig5.2.png Graphic file (type png)
 <use assets/fig5.2.png>
-Package pdftex.def Info: assets/fig5.2.png  used on input line 274.
+Package pdftex.def Info: assets/fig5.2.png  used on input line 281.
 (pdftex.def)             Requested size: 230.18251pt x 92.07349pt.
-<assets/fig5.2-value.png, id=189, 1003.75pt x 401.5pt>
+<assets/fig5.2-value.png, id=184, 1003.75pt x 401.5pt>
 File: assets/fig5.2-value.png Graphic file (type png)
 <use assets/fig5.2-value.png>
-Package pdftex.def Info: assets/fig5.2-value.png  used on input line 280.
+Package pdftex.def Info: assets/fig5.2-value.png  used on input line 287.
 (pdftex.def)             Requested size: 230.18251pt x 92.07349pt.
-<assets/fig5.2-valuePercent.png, id=190, 1003.75pt x 401.5pt>
+<assets/fig5.2-valuePercent.png, id=185, 1003.75pt x 401.5pt>
 File: assets/fig5.2-valuePercent.png Graphic file (type png)
 <use assets/fig5.2-valuePercent.png>
-Package pdftex.def Info: assets/fig5.2-valuePercent.png  used on input line 286.
+Package pdftex.def Info: assets/fig5.2-valuePercent.png  used on input line 293.
 (pdftex.def)             Requested size: 234.87749pt x 93.94817pt.
  [9 <./assets/fig5.2.png> <./assets/fig5.2-value.png> <./assets/fig5.2-valuePercent.png>]
-<assets/chart-studio.png, id=206, 1694.33pt x 714.67pt>
+<assets/chart-studio.png, id=207, 1694.33pt x 714.67pt>
 File: assets/chart-studio.png Graphic file (type png)
 <use assets/chart-studio.png>
-Package pdftex.def Info: assets/chart-studio.png  used on input line 319.
+Package pdftex.def Info: assets/chart-studio.png  used on input line 326.
 (pdftex.def)             Requested size: 469.75499pt x 198.14333pt.
-<assets/intégrationWordpress.png, id=207, 1148.29pt x 649.42625pt>
+<assets/intégrationWordpress.png, id=208, 1148.29pt x 649.42625pt>
 File: assets/intégrationWordpress.png Graphic file (type png)
 <use assets/intégrationWordpress.png>
-Package pdftex.def Info: assets/intégrationWordpress.png  used on input line 324.
+Package pdftex.def Info: assets/intégrationWordpress.png  used on input line 331.
 (pdftex.def)             Requested size: 469.75499pt x 265.67192pt.
  [10] [11 <./assets/chart-studio.png> <./assets/intégrationWordpress.png>] (./document.aux)
  ***********
@@ -454,10 +454,10 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  75i,8n,79p,702b,1949s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/cm-super/sfbi1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbi1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on document.pdf (11 pages, 544171 bytes).
+Output written on document.pdf (11 pages, 546055 bytes).
 PDF statistics:
- 308 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
+ 310 PDF objects out of 1000 (max. 8388607)
+ 256 compressed objects within 3 object streams
  122 named destinations out of 1000 (max. 500000)
  84 words of extra memory for PDF output out of 10000 (max. 10000000)
 

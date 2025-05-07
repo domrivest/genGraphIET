@@ -197,6 +197,15 @@ class figureIET:
       self.fig.update_yaxes(tickangle=int(self.metadataDict['yaxes.tickangle']))
    except: None
    
+   # Cacher la legende si spécifié
+   try:
+      self.fig.update_layout(showlegend=self.metadataDict['showlegend']=='True')
+   except : None
+
+   # Changer la largeur des barres
+   try:
+      self.fig.update_traces(width=float(self.metadataDict['traces.width']))
+   except : None
    
    # Si français - Changer les noms de variables
    if isFrench and not self.metadataDict['chart.type'] == 'pie':
